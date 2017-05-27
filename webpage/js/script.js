@@ -1,3 +1,4 @@
+var myPosition = {};
 function initMap() {
 
   var markersToShow = [];
@@ -8,16 +9,9 @@ function initMap() {
     disableDefaultUI: true
   });
 
-
-  // var marker = new google.maps.Marker({
-  //   position: {lat: 52.239802, lng: 21.011818},
-  //   animation: google.maps.Animation.BOUNCE,
-  //   map: map,
-  //   title: 'Hello World!'
-  // });
-
+  
   const fetchMarkers = () => {
-    let url = 'https://10.78.25.34:8080/patrols/?x=52.239802&y=21.011818&rad=1000';
+    let url = 'http://10.78.25.34:8080/patrols/?x=52.239802&y=21.011818&rad=1000';
     fetch(url).then(response => {
       if (response.ok) {
         // console.log(response);
@@ -68,7 +62,7 @@ function initMap() {
 
   ///------------your position renerding--------------
 
-  var myPosition = new google.maps.LatLng(52.229802,21.011818);
+   myPosition = new google.maps.LatLng(52.229802,21.011818);
 
   function getLocation() {
     if (navigator.geolocation) {
@@ -94,15 +88,18 @@ function initMap() {
       disableDefaultUI: true
     });
 
-    var myCity = new google.maps.Circle({
-      center: myPosition,
-      radius: 150,
-      strokeColor: '#0000FF',
-      strokeOpacity: 0.8,
-      strokeWeight: 2,
-      fillColor: '#0000FF',
-      fillOpacity: 0.4
+    var myCity = new google.maps.Marker({
+      position: myPosition,
+      animation: google.maps.Animation.BOUNCE,
+      icon: 'http://www.i2clipart.com/cliparts/a/8/d/0/128135a8d0f0b984c0e1830d8c92ba2e6f6487.png',
+      map: map,
+      title: 'Hello World!'
     });
     myCity.setMap(map);
   }
 }
+function addBaguette(){
+  console.log(myPosition);
+  
+}
+
