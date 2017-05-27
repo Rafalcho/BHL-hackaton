@@ -75,4 +75,5 @@ api.add_resource(Patrols, '/patrols/')
 
 if __name__ == '__main__':
     Process(target=cleaner_patrol_worker, args=(SECONDS_THRESHOLD, PERIOD_TIME_SECONDS_CLEANING_PATROL)).start()
-    app.run(port=8080, host='0.0.0.0')
+    context = ('domain.crt', 'domain.key')
+    app.run(port=8080, host='0.0.0.0', ssl_context=context)

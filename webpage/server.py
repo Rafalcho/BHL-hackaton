@@ -5,7 +5,6 @@ from flask_cors import CORS
 app = Flask(__name__, template_folder='templates', static_url_path='')
 CORS(app)
 
-
 @app.route('/')
 def root():
     return render_template('index.html')
@@ -18,5 +17,12 @@ def send_js(path):
 def send_css(path):
     return send_from_directory('css', path)
 
+
+@app.route('/img/<path:path>')
+def send_img(path):
+    return send_from_directory('img', path)
+
+
 if __name__ == '__main__':
-    app.run(port=9080, host='0.0.0.0')
+    context = ('domain.crt', 'domain.key')#certificate and key files
+    app.run(port=9080, host='0.0.0.0', ssl_context=context)
