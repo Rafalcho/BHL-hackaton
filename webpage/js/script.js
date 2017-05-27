@@ -4,7 +4,8 @@ function initMap() {
 
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 14,
-    center: {lat: 52.229802, lng: 21.011818}
+    center: {lat: 52.229802, lng: 21.011818},
+    disableDefaultUI: true
   });
 
 
@@ -89,7 +90,8 @@ function initMap() {
   function drawMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 16,
-      center: myPosition
+      center: myPosition,
+      disableDefaultUI: true
     });
 
     var myCity = new google.maps.Circle({
