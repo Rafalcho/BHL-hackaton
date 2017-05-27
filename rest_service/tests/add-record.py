@@ -8,5 +8,5 @@ payloads = [{"x": 52.219690, "y": 21.011764, 'description': 'abc'},
            {"x": 52.217234, "y": 21.008073, 'description': 'abc'}]
 
 for payload in payloads:
-    r = requests.post(url,data=json.dumps(payload))
+    r = requests.post(url, data=json.dumps(payload))
     print(r.status_code, r.reason)

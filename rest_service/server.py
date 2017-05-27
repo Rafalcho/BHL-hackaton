@@ -70,7 +70,41 @@ class Patrols(Resource):
         return to_response, 201
 
 
+class Parties(Resource):
+    def get(self):
+        args = request.args
+        client_x = float(args['x'])
+        client_y = float(args['y'])
+        radius = float(args['rad'])
+
+        posts = mongo_client['parties']
+        patrols = []
+
+        for post in posts.find():
+            if _points_to_distance(client_x, client_y, post['x'], post['y']) < radius:
+                patrols.append({"x": post["x"], "y": post["y"],
+                                "description": post["description"]})
+        logging.info("GET request on /parties/")
+        return json.dumps(patrols), 200
+
+
+    def post(self):
+        print (request.data)
+        data = json.loads(request.data.decode())
+        entity = {'x': float(data['x']), 'y': float(data['y']),
+                   'description': data['description']}
+        to_response = json.dumps(entity)
+        print(entity)
+        mongo_client['parties'].insert(entity)
+        mongo_client['parties'].save(entity)
+        logging.info("POST request on /parties/")
+        return to_response, 201
+
+
+
+
 api.add_resource(Patrols, '/patrols/')
+api.add_resource(Parties, '/parties/')
 
 
 if __name__ == '__main__':
