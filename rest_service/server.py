@@ -69,6 +69,7 @@ class Patrols(Resource):
         logging.info("POST request on /patrols/")
         return to_response, 201
 
+
 api.add_resource(Patrols, '/patrols/')
 
 
