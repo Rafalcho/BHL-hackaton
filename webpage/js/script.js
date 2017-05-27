@@ -3,7 +3,7 @@ function initMap() {
   var markersToShow = [];
 
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 13,
+    zoom: 14,
     center: {lat: 52.229802, lng: 21.011818}
   });
 
@@ -32,6 +32,7 @@ function initMap() {
         let newMarker = new google.maps.Marker({
           position: {lat: marker.x, lng: marker.y},
           animation: google.maps.Animation.BOUNCE,
+          icon: 'https://image.ibb.co/koRcQv/baguette1.png',
           map: map,
           title: 'Hello World!'
         });
@@ -83,11 +84,11 @@ function initMap() {
 
   }
   // drawMap();
-   getLocation();
+  getLocation();
 
   function drawMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 13,
+      zoom: 16,
       center: myPosition
     });
 
