@@ -2,8 +2,16 @@
     #map {
       height: 100%;
     }
+
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
     }
+
+nav {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
