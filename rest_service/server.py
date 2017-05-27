@@ -8,8 +8,11 @@ from multiprocessing import Process
 import logging
 from settings import SECONDS_THRESHOLD, PERIOD_TIME_SECONDS_CLEANING_PATROL
 import math
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 mongo_client = MongoClient()['bhl']
 logging.basicConfig(format='%(asctime)s -> %(message)s', level=logging.INFO)
@@ -39,30 +42,33 @@ def _points_to_distance(olat, olng, dlat, dlong):
 class Patrols(Resource):
     def get(self):
         args = request.args
-        client_x = args['x']
-        client_y = args['y']
-        radius = args['rad']
+        client_x = float(args['x'])
+        client_y = float(args['y'])
+        radius = float(args['rad'])
 
-        posts = mongo_client.posts
+        posts = mongo_client['patrols']
         patrols = []
 
         for post in posts.find():
             if _points_to_distance(client_x, client_y, post['x'], post['y']) < radius:
-                patrols.append(post)
+                patrols.append({"x": post["x"], "y": post["y"],
+                                "time": post["time"], "description": post["description"]})
         logging.info("GET request on /patrols/")
         return json.dumps(patrols), 200
 
     def post(self):
 
         print (request.data)
-        data = json.loads(request.data)
+        data = json.loads(request.data.decode())
         print (data)
-        entity = {'x': data['x'], 'y': data['y'],
+        entity = {'x': float(data['x']), 'y': float(data['y']),
                   'time': dt.datetime.now().timestamp(), 'description': data['description']}
-        print entity
+        to_response = json.dumps(entity)
+        print(entity)
         mongo_client['patrols'].insert(entity)
+        mongo_client['patrols'].save(entity)
         logging.info("POST request on /patrols/")
-        return json.dumps(entity), 201
+        return to_response, 201
 
 api.add_resource(Patrols, '/patrols/')
 
