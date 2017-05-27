@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<head>
+  <title>Simple Map</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta charset="utf-8">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
-      <link rel="stylesheet" href="../css/style.css">
-  </head>
-  <body>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
 
-      <nav>
-        <div class="nav-wrapper">
-          <a href="#" class="brand-logo left"> ForestRun</a>
-          <ul id="nav-mobile" class="right">
-            <li><i class="material-icons large">add</i></li>
-            <li><i class="large material-icons">reorder</i></li>
-          </ul>
-        </div>
-      </nav>
+<nav>
+  <div class="nav-wrapper">
+    <a href="#" class="brand-logo left"> ForestRun</a>
+    <ul id="nav-mobile" class="right">
+      <li><i class="material-icons large">add</i></li>
+      <li><i class="large material-icons">reorder</i></li>
+    </ul>
+  </div>
+</nav>
 
-  <div id="map"></div>
+<div id="map"></div>
+<div style="position:absolute;bottom:10px;right:10px">
+  <a class="btn-floating btn-large waves-effect waves-light red" onclick="addBaguette()"><i class="material-icons">add</i></a>
+
+</div>
 
 
-
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzrzKRCW-Prb60UHlYadM7iQ4pnWSzV7k&callback=initMap">
-    </script>
-      <script src="../js/script.js"></script>
-  </body>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzrzKRCW-Prb60UHlYadM7iQ4pnWSzV7k&callback=initMap">
+</script>
+<script src="../js/script.js"></script>
+</body>
 </html>

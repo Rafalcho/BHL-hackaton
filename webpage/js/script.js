@@ -1,4 +1,3 @@
-var myPosition = {};
 function initMap() {
 
   var markersToShow = [];
@@ -9,7 +8,14 @@ function initMap() {
     disableDefaultUI: true
   });
 
-  
+
+  // var marker = new google.maps.Marker({
+  //   position: {lat: 52.239802, lng: 21.011818},
+  //   animation: google.maps.Animation.BOUNCE,
+  //   map: map,
+  //   title: 'Hello World!'
+  // });
+
   const fetchMarkers = () => {
     let url = 'http://10.78.25.34:8080/patrols/?x=52.239802&y=21.011818&rad=1000';
     fetch(url).then(response => {
@@ -84,8 +90,7 @@ function initMap() {
   function drawMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 16,
-      center: myPosition,
-      disableDefaultUI: true
+      center: myPosition
     });
 
     var myCity = new google.maps.Marker({
@@ -100,6 +105,6 @@ function initMap() {
 }
 function addBaguette(){
   console.log(myPosition);
-  
+
 }
 
