@@ -7,18 +7,13 @@ function initMap() {
     center: {lat: 52.229802, lng: 21.011818}
   });
 
-  var infowindow = new google.maps.InfoWindow({
-        content: 'BAGIETY ALERT (2min temu)'
-      });
 
-  var marker = new google.maps.Marker({
-    position: {lat: 52.239802, lng: 21.011818},
-    animation: google.maps.Animation.BOUNCE,
-    map: map,
-    title: 'Hello World!'
-  });
-
-  infowindow.open(map, marker);
+  // var marker = new google.maps.Marker({
+  //   position: {lat: 52.239802, lng: 21.011818},
+  //   animation: google.maps.Animation.BOUNCE,
+  //   map: map,
+  //   title: 'Hello World!'
+  // });
 
   const fetchMarkers = () => {
     let url = 'http://10.78.25.34:8080/patrols/?x=52.239802&y=21.011818&rad=1000';
@@ -40,6 +35,13 @@ function initMap() {
           map: map,
           title: 'Hello World!'
         });
+
+        let infowindow = new google.maps.InfoWindow({
+              content: 'lol'
+            });
+
+        infowindow.open(map, newMarker);
+
         markersToShow.push(newMarker);
       });
 
@@ -49,13 +51,16 @@ function initMap() {
     });
   };
 
+  fetchMarkers();
+
   let refresher = setInterval(() => {
+    console.log(markersToShow);
     markersToShow.forEach(marker => {
       marker.setMap(null);
     });
     markersToShow = [];
     fetchMarkers();
     console.log(markersToShow);
-  }, 5000);
+  }, 30000);
 
 }
