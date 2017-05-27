@@ -3,7 +3,6 @@ from flask_restful import Resource, Api
 from pymongo import MongoClient
 import json
 import math
-from .settings import RADIUS
 
 app = Flask(__name__)
 api = Api(app)
@@ -49,7 +48,7 @@ class Patrols(Resource):
         return 6371 * c
 
 
-api.add_resource(HelloWorld, '/')
+api.add_resource(, '/')
 
 if __name__ == '__main__':
     app.run(debug=True)
