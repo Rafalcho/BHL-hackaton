@@ -16,7 +16,7 @@ function initMap() {
   // });
 
   const fetchMarkers = () => {
-    let url = 'http://192.168.43.49:8080/patrols/?x=52.239802&y=21.011818&rad=1000';
+    let url = 'https://10.78.25.34:8080/patrols/?x=52.239802&y=21.011818&rad=1000';
     fetch(url).then(response => {
       if (response.ok) {
         // console.log(response);
