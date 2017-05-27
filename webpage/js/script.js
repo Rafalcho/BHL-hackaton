@@ -11,11 +11,9 @@ function initMap() {
   });
 
   const fetchMarkers = () => {
-    console.log(myPosition);
     let url = 'http://10.78.25.34:8080/patrols/?x='+myPosition.lat()+'&y='+myPosition.lng()+'&rad=100';
     fetch(url).then(response => {
       if (response.ok) {
-        // console.log(response);
         return response.json();
       } else {
         throw new Error('Fetching markers failed');
@@ -35,11 +33,14 @@ function initMap() {
         });
 
         let infowindow = new google.maps.InfoWindow({
-              content: 'lol'
+              content: marker.description
             });
 
-        infowindow.open(map, newMarker);
-
+       // infowindow.open(map, newMarker);
+        newMarker.addListener('click', function() {
+          infowindow.open(map,newMarker);
+          }
+        );
         markersToShow.push(newMarker);
       });
 
@@ -52,13 +53,11 @@ function initMap() {
   fetchMarkers();
 
   let refresher = setInterval(() => {
-    console.log(markersToShow);
     markersToShow.forEach(marker => {
       marker.setMap(null);
     });
     markersToShow = [];
     fetchMarkers();
-    console.log(markersToShow);
   }, 30000);
 
 
@@ -105,7 +104,6 @@ function initMap() {
 
   function placeMarker(position, map) {
     if(choosePoint){
-      console.log("send post");
       sendPost(position);
       choosePoint=false;
     }
@@ -113,13 +111,11 @@ function initMap() {
 }
 
 function addBaguette(){
-  console.log(myPosition);
     document.getElementById("AddBaguetteAlert").style.visibility="visible";
 }
 function sendAlert(){
   document.getElementById("AddBaguetteAlert").style.visibility="hidden";
   sendPost(myPosition);
-  console.log("Śle");
 }
 function chooseSpot(){
   document.getElementById("AddBaguetteAlert").style.visibility="hidden";
@@ -129,12 +125,11 @@ function sendPost(position){
   var payload = {
     x: position.lat(),
     y: position.lng(),
-    description: "blaa"
+    description: document.getElementById("description").value
   };
 
   var data = JSON.stringify( payload );
-
-console.log(data);
+  
   fetch("http://10.78.25.34:8080/patrols/",
     {
       method: "POST",
