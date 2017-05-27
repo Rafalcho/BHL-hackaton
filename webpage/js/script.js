@@ -199,8 +199,16 @@ const getParties = () => {
       map: map,
       title: 'Hello World!'
     });
-var content=marker.name+'<br/>Opis:'+marker.description+
-  '<br/><button id="'+marker.description+'" onclick="joinParty()">Dołącz</button><br/>';
+  var peopleList=[];
+  if (marker.people != null) {
+    marker.people.forEach(function(e)
+    {
+      peopleList.push(e.name + " "+ e.surname+"<br/>");
+      console.log(e.surname);
+    });
+  }
+  var content = marker.name + '<br/>Opis:' + marker.description + '<br/>' + peopleList+
+  '<br/><button id="' + marker.name + '" onclick="joinParty()">Dołącz</button><br/>';
   let infowindow = new google.maps.InfoWindow({
     content: content
   });
@@ -222,8 +230,20 @@ var content=marker.name+'<br/>Opis:'+marker.description+
 function joinParty(){
   console.log(event.currentTarget);
   var name = event.currentTarget.id;
-  console.log(name);
-  
+  var payload = {
+    name:"rolf",
+    surname:"blaa"
+  };
+
+  var data = JSON.stringify( payload );
+  console.log(data);
+  fetch("http://10.78.16.243:8080/parties/"+name+"/people",
+    {
+      method: "POST",
+      body: data
+    })
+    .then(function(res){ return res.json(); })
+    .then(function(data){  })
 
 
 }
