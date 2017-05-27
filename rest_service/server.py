@@ -57,7 +57,6 @@ class Patrols(Resource):
         return json.dumps(patrols), 200
 
     def post(self):
-
         print (request.data)
         data = json.loads(request.data.decode())
         print (data)
