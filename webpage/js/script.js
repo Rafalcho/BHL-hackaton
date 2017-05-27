@@ -17,7 +17,7 @@ function initMap() {
   // });
 
   const fetchMarkers = () => {
-    let url = 'https://10.78.25.34:8080/patrols/?x=52.239802&y=21.011818&rad=1000';
+    let url = 'http://10.78.25.34:8080/patrols/?x=52.239802&y=21.011818&rad=1000';
     fetch(url).then(response => {
       if (response.ok) {
         // console.log(response);
@@ -29,23 +29,82 @@ function initMap() {
     .then(response => {
       const data = JSON.parse(response);
 
-      data.forEach(marker => {
-        let newMarker = new google.maps.Marker({
-          position: {lat: marker.x, lng: marker.y},
-          animation: google.maps.Animation.BOUNCE,
-          icon: 'https://image.ibb.co/koRcQv/baguette1.png',
-          map: map,
-          title: 'Hello World!'
-        });
+      function contains(a, obj) {
+        for (var i = 0; i < a.length; i++) {
+          if (a[i].title === obj.id) {
+            return true;
+          }
+        }
+        console.log('dupa');
+        return false;
+      }
 
-        let infowindow = new google.maps.InfoWindow({
-              content: 'lol'
-            });
+      function contains_remove(a, obj) {
+        for (var i = 0; i < a.length; i++) {
+          if (a[i].id === obj.title) {
+            return true;
+          }
+        }
+        console.log('dupa');
+        return false;
+      }
+      console.log('wykonuje sie');
+      for (let i = 0; i < markersToShow.length; i++) {
+        if (!contains_remove(data, markersToShow[i])) {
+          console.log('huj');
+          markersToShow[i].setMap(null);
+          let tmp = markersToShow[i];
+          markersToShow[i] = markersToShow[markersToShow.length - 1];
+          markersToShow[markersToShow.length - 1] = tmp;
+          markersToShow.pop();
+          --i;
+        }
+      }
+      console.log(data.length);
+      console.log(markersToShow.length);
+      for (let i = 0; i < data.length; i++) {
+        if (!contains(markersToShow, data[i])) {
+          console.log('heheszki');
+          // markersToShow[i].setMap(null);
 
-        infowindow.open(map, newMarker);
+          // console.log(markersToShow[i].title);
 
-        markersToShow.push(newMarker);
-      });
+          let newMarker = new google.maps.Marker({
+            position: {lat: data[i].x, lng: data[i].y},
+            animation: google.maps.Animation.BOUNCE,
+            icon: 'https://image.ibb.co/koRcQv/baguette1.png',
+            map: map,
+            title: data[i].id
+          });
+
+          let infowindow = new google.maps.InfoWindow({
+                content: data[i].description
+              });
+
+          infowindow.open(map, newMarker);
+
+          markersToShow.push(newMarker);
+
+        }
+      }
+
+      // data.forEach(marker => {
+      //   let newMarker = new google.maps.Marker({
+      //     position: {lat: marker.x, lng: marker.y},
+      //     animation: google.maps.Animation.BOUNCE,
+      //     icon: 'https://image.ibb.co/koRcQv/baguette1.png',
+      //     map: map,
+      //     title: 'Hello World!'
+      //   });
+      //
+      //   let infowindow = new google.maps.InfoWindow({
+      //         content: 'lol'
+      //       });
+      //
+      //   infowindow.open(map, newMarker);
+      //
+      //   markersToShow.push(newMarker);
+      // });
 
     })
     .catch(error => {
@@ -56,14 +115,14 @@ function initMap() {
   fetchMarkers();
 
   let refresher = setInterval(() => {
-    console.log(markersToShow);
-    markersToShow.forEach(marker => {
-      marker.setMap(null);
-    });
-    markersToShow = [];
+    // console.log(markersToShow);
+    // markersToShow.forEach(marker => {
+    //   marker.setMap(null);
+    // });
+    // markersToShow = [];
     fetchMarkers();
-    console.log(markersToShow);
-  }, 30000);
+    // console.log(markersToShow);
+  }, 5000);
 
 
   ///------------your position renerding--------------
@@ -81,6 +140,8 @@ function initMap() {
   function showPosition(position) {
     myPosition = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
     drawMap();
+    markersToShow.forEach((x) => x.setMap(null));
+    markersToShow = [];
     fetchMarkers();
 
   }
