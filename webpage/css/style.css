@@ -21,10 +21,10 @@ nav {
   display: none;
   z-index: 2;
   position: absolute;
-  top:250px;
+  top:150px;
 
 }
 
-.card {
+.pop {
   width: 100vw;
 }
