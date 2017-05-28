@@ -1,88 +1,88 @@
 var myPosition;
 var choosePoint = false;
 var map;
-var parties=[];
+var parties = [];
 function initMap() {
 
   var markersToShow = [];
   myPosition = new google.maps.LatLng(52.229802,21.011818);
-   map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     zoom: 14,
     center: {lat: 52.229802, lng: 21.011818},
     disableDefaultUI: true
   });
 
   const fetchMarkers = () => {
-    let url = 'https://10.78.25.34:8080/patrols/?x='+myPosition.lat()+'&y='+myPosition.lng()+'&rad=100';
-    fetch(url).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Fetching markers failed');
-      }
-    })
-    .then(response => {
-      const data = JSON.parse(response);
-      console.log(response);
+      let url = 'https://10.78.25.34:8080/patrols/?x=' + myPosition.lat() + '&y=' + myPosition.lng() + '&rad=100';
+      fetch(url).then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Fetching markers failed');
+        }
+      })
+      .then(response => {
+            const data = JSON.parse(response);
+            console.log(response);
 
-          function contains(a, obj) {
-            for (var i = 0; i < a.length; i++) {
-              if (a[i].title === obj.id) {
-                return true;
+            function contains(a, obj) {
+              for (var i = 0; i < a.length; i++) {
+                if (a[i].title === obj.id) {
+                  return true;
+                }
+              }
+              return false;
+            }
+
+            function contains_remove(a, obj) {
+              for (var i = 0; i < a.length; i++) {
+                if (a[i].id === obj.title) {
+                  return true;
+                }
+              }
+              return false;
+            }
+            for (let i = 0; i < markersToShow.length; i++) {
+              if (!contains_remove(data, markersToShow[i])) {
+                markersToShow[i].setMap(null);
+                let tmp = markersToShow[i];
+                markersToShow[i] = markersToShow[markersToShow.length - 1];
+                markersToShow[markersToShow.length - 1] = tmp;
+                markersToShow.pop();
+                --i;
               }
             }
-            return false;
-          }
 
-          function contains_remove(a, obj) {
-            for (var i = 0; i < a.length; i++) {
-              if (a[i].id === obj.title) {
-                return true;
+            for (let i = 0; i < data.length; i++) {
+              if (!contains(markersToShow, data[i])) {
+
+                // markersToShow[i].setMap(null);
+
+                // console.log(markersToShow[i].title);
+
+                let newMarker = new google.maps.Marker({
+                    position: {lat: data[i].x, lng: data[i].y},
+                    animation: google.maps.Animation.BOUNCE,
+                    icon: 'https://image.ibb.co/koRcQv/baguette1.png',
+                    map: map,
+                    title: data[i].id
+                  });
+
+                let infowindow = new google.maps.InfoWindow({
+                    content: data[i].description
+                  });
+
+                newMarker.addListener('click', function() {
+                        infowindow.open(map, newMarker);
+                      }
+                );
+                markersToShow.push(newMarker);
               }
             }
-            return false;
-          }
-          for (let i = 0; i < markersToShow.length; i++) {
-            if (!contains_remove(data, markersToShow[i])) {
-              markersToShow[i].setMap(null);
-              let tmp = markersToShow[i];
-              markersToShow[i] = markersToShow[markersToShow.length - 1];
-              markersToShow[markersToShow.length - 1] = tmp;
-              markersToShow.pop();
-              --i;
-            }
-          }
-
-          for (let i = 0; i < data.length; i++) {
-            if (!contains(markersToShow, data[i])) {
-
-              // markersToShow[i].setMap(null);
-
-              // console.log(markersToShow[i].title);
-
-              let newMarker = new google.maps.Marker({
-                  position: {lat: data[i].x, lng: data[i].y},
-                  animation: google.maps.Animation.BOUNCE,
-                  icon: 'https://image.ibb.co/koRcQv/baguette1.png',
-                  map: map,
-                  title: data[i].id
-                });
-
-              let infowindow = new google.maps.InfoWindow({
-                  content: data[i].description
-                });
-
-              newMarker.addListener('click', function() {
-                      infowindow.open(map, newMarker);
-                    }
-              );
-              markersToShow.push(newMarker);
-            }
-          }
-        })
-  .catch(error => {
-          console.log('Fetching data error:', error);
-        });
+          })
+    .catch(error => {
+            console.log('Fetching data error:', error);
+          });
     };
 
   fetchMarkers();
@@ -115,7 +115,7 @@ function initMap() {
         });
     };
 
-  fetchAlerts();
+  // fetchAlerts();
 
   let refresherAlers = setInterval(() => {
           if ((Date.now() - last_alert_time) > 180000) {
@@ -163,7 +163,7 @@ function initMap() {
     var myCity = new google.maps.Marker({
         position: myPosition,
         animation: google.maps.Animation.DROP,
-        icon: 'img/128135a8d0f0b984c0e1830d8c92ba2e6f6487.png',
+        icon: 'img/rsz_128135a8d0f0b984c0e1830d8c92ba2e6f6487.png',
         map: map,
         title: 'Hello World!'
       });
@@ -180,9 +180,9 @@ function initMap() {
 
   function placeMarker(position, map) {
     console.log(choosePoint);
-    if(choosePoint){
+    if (choosePoint) {
       sendPostBaggeteu(position);
-      choosePoint=false;
+      choosePoint = false;
     }
   }
 }
@@ -190,136 +190,129 @@ function initMap() {
 function addBaguette() {
   document.getElementById('AddBaguetteAlert').style.visibility = 'visible';
 }
-function sendAlert(){
-  document.getElementById("AddBaguetteAlert").style.visibility="hidden";
+function sendAlert() {
+  document.getElementById('AddBaguetteAlert').style.visibility = 'hidden';
   sendPostBaggeteu(myPosition);
 }
 function chooseSpot() {
   document.getElementById('AddBaguetteAlert').style.visibility = 'hidden';
   choosePoint = true;
 }
-function sendPostBaggeteu(position){
+function sendPostBaggeteu(position) {
   var payload = {
       x: position.lat(),
       y: position.lng(),
       description: document.getElementById('description').value
     };
 
-  var data = JSON.stringify( payload );
-
+  var data = JSON.stringify(payload);
   fetch("https://10.78.25.34:8080/patrols/",
     {
-      method: "POST",
+      method: 'POST',
       body: data
     })
-    .then(function(res){ return res.json(); })
-    .then(function(data){  })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {  });
 }
 
-function sendPostParty(position){
+function sendPostParty(position) {
   var payload = {
     x: position.lat(),
     y: position.lng(),
-    name: document.getElementById("partyName").value,
-    description: document.getElementById("partyDescription").value
+    name: document.getElementById('partyName').value,
+    description: document.getElementById('partyDescription').value
   };
-
-  var data = JSON.stringify( payload );
-console.log(data);
-  fetch("https://10.78.25.34:8080/parties/",
+  var data = JSON.stringify(payload);
+  console.log(data);
+  fetch('http://10.78.25.34:8080/parties/',
     {
-      method: "POST",
+      method: 'POST',
       body: data
     })
-    .then(function(res){ return res.json(); })
-    .then(function(data){  })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {  });
 }
-function makeParty(){
-  document.getElementById("partyForm").style.visibility="hidden";
+function makeParty() {
+  document.getElementById('partyForm').style.visibility = 'hidden';
   sendPostParty(myPosition);
 
+}
+function abortParty() {
+  document.getElementById('partyForm').style.visibility = 'hidden';
 
 }
-function abortParty(){
-  document.getElementById("partyForm").style.visibility="hidden";
-
+function addParty() {
+  document.getElementById('partyForm').style.visibility = 'visible';
 }
-function addParty(){
-  document.getElementById("partyForm").style.visibility="visible";
-}
-function showParty(){
-  parties=[];
+function showParty() {
+  parties = [];
   getParties();
 }
 const getParties = () => {
   let url = 'https://10.78.25.34:8080/parties/?x='+myPosition.lat()+'&y='+myPosition.lng()+'&rad=100';
   fetch(url).then(response => {
     if (response.ok) {
-    return response.json();
-  } else {
-    throw new Error('Fetching markers failed');
-  }
-})
+      return response.json();
+    } else {
+      throw new Error('Fetching markers failed');
+    }
+  })
 .then(response => {
     const data = JSON.parse(response);
-  console.log(response);
+    console.log(response);
 
-  data.forEach(marker => {
-    let newMarker = new google.maps.Marker({
-      position: {lat: marker.x, lng: marker.y},
-      animation: google.maps.Animation.BOUNCE,
-      icon: 'https://cdn1.iconfinder.com/data/icons/party-3/500/Party_2-128.png',
-      map: map,
-      title: 'Hello World!'
+    data.forEach(marker => {
+      let newMarker = new google.maps.Marker({
+        position: {lat: marker.x, lng: marker.y},
+        animation: google.maps.Animation.BOUNCE,
+        icon: 'https://cdn1.iconfinder.com/data/icons/party-3/500/Party_2-128.png',
+        map: map,
+        title: 'Hello World!'
+      });
+      var peopleList = [];
+      if (marker.people != null) {
+        marker.people.forEach(function(e) {
+          peopleList.push(e.name + ' ' + e.surname + '<br/>');
+          console.log(e.surname);
+        });
+      }
+      var content = marker.name + '<br/>Opis:' + marker.description + '<br/>' + peopleList +
+      '<br/><button id="' + marker.name + '" onclick="joinParty()">Dołącz</button><br/>';
+      let infowindow = new google.maps.InfoWindow({
+        content: content
+      });
+
+      // infowindow.open(map, newMarker);
+      newMarker.addListener('click', function() {
+          infowindow.open(map, newMarker);
+        }
+      );
+      parties.push(newMarker);
     });
-  var peopleList=[];
-  if (marker.people != null) {
-    marker.people.forEach(function(e)
-    {
-      peopleList.push(e.name + " "+ e.surname+"<br/>");
-      console.log(e.surname);
-    });
-  }
-  var content = marker.name + '<br/>Opis:' + marker.description + '<br/>' + peopleList+
-  '<br/><button id="' + marker.name + '" onclick="joinParty()">Dołącz</button><br/>';
-  let infowindow = new google.maps.InfoWindow({
-    content: content
-  });
 
-  // infowindow.open(map, newMarker);
-  newMarker.addListener('click', function() {
-      infowindow.open(map,newMarker);
-    }
-  );
-  parties.push(newMarker);
-});
-
-})
+  })
 .catch(error => {
     console.log('Fetching data error:', error);
-});
+  });
 };
 
-function joinParty(){
+function joinParty() {
   console.log(event.currentTarget);
   var name = event.currentTarget.id;
   var payload = {
-    name:"rolf",
-    surname:"blaa"
+    name: 'rolf',
+    surname: 'blaa'
   };
 
-  var data = JSON.stringify( payload );
+  var data = JSON.stringify(payload);
   console.log(data);
   fetch("https://10.78.25.34:8080/parties/"+name+"/people",
     {
-      method: "POST",
+      method: 'POST',
       body: data
     })
-    .then(function(res){ return res.json(); })
-    .then(function(data){  })
-    getParties();
+    .then(function(res) { return res.json(); })
+    .then(function(data) {  });
+  getParties();
 
 }
-
-
-
