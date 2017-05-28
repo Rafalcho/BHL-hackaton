@@ -2,7 +2,8 @@ var myPosition;
 var choosePoint = false;
 var map;
 var parties=[];
-var flag_alert = true;
+var last_alert_time = 0;
+// var flag_alert = true;
 function initMap() {
 
   var markersToShow = [];
@@ -88,10 +89,8 @@ function initMap() {
 
   fetchMarkers();
 
-  let last_alert_time = Date.now();
-
   const fetchAlerts = () => {
-      flag_alert = false;
+      // flag_alert = false;
       let url = 'https://10.78.25.34:8080/patrols/?x=' + myPosition.lat() + '&y=' + myPosition.lng() + '&rad=2';
       fetch(url).then(response => {
           if (response.ok) {
@@ -103,6 +102,7 @@ function initMap() {
   .then(response => {
           const data = JSON.parse(response);
           if (data.length) {
+              last_alert_time = Date.now();
             console.log('bagiety');
             fetchMarkers();
 
@@ -116,12 +116,14 @@ function initMap() {
           }
         });
     };
-  fetchAlerts();
+  // fetchAlerts();
 
   let refresherAlers = setInterval(() => {
-          if (((Date.now() - last_alert_time) > 180000) || flag_alert) {
+      console.log("teraz: " + (Date.now()));
+    console.log("ostatnio: " + last_alert_time);
+        console.log("roznica: " + (Date.now() - last_alert_time));
+          if (((Date.now() - last_alert_time) > 180000)) {
             fetchAlerts();
-            last_alert_time = Date.now();
           }
         }, 10000);
 
