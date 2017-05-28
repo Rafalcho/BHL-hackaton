@@ -18,8 +18,13 @@ nav {
 
 
 #alertPopup {
+  display: none;
   z-index: 2;
   position: absolute;
-  top:80px;
-  left: 20px;
+  top:250px;
+
+}
+
+.card {
+  width: 100vw;
 }
