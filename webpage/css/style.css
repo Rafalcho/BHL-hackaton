@@ -25,9 +25,15 @@ nav {
   top:100px;
   left: 0!important;
  margin: 0 auto;
- width: 95vw;
+ width: 94 vw;
 }
 
 .pop {
-  width: 95vw;
+  width: 94vw;
+
+
+}
+
+.centerItems {
+  text-align: center;
 }
