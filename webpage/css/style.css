@@ -7,6 +7,7 @@
       height: 100%;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
 nav {
@@ -14,4 +15,19 @@ nav {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+
+#alertPopup {
+  display: none;
+  z-index: 2;
+  position: absolute;
+  top:100px;
+  left: 0!important;
+ margin: 0 auto;
+ width: 95vw;
+}
+
+.pop {
+  width: 95vw;
 }
