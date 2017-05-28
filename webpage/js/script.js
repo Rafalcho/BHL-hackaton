@@ -2,6 +2,7 @@ var myPosition;
 var choosePoint = false;
 var map;
 var parties=[];
+var flag_alert = true;
 function initMap() {
 
   var markersToShow = [];
@@ -90,6 +91,7 @@ function initMap() {
   let last_alert_time = Date.now();
 
   const fetchAlerts = () => {
+      flag_alert = false;
       let url = 'https://10.78.25.34:8080/patrols/?x=' + myPosition.lat() + '&y=' + myPosition.lng() + '&rad=2';
       fetch(url).then(response => {
           if (response.ok) {
@@ -117,7 +119,7 @@ function initMap() {
   fetchAlerts();
 
   let refresherAlers = setInterval(() => {
-          if ((Date.now() - last_alert_time) > 180000) {
+          if (((Date.now() - last_alert_time) > 180000) || flag_alert) {
             fetchAlerts();
             last_alert_time = Date.now();
           }
@@ -182,7 +184,6 @@ function initMap() {
     if(choosePoint){
       sendPostBaggeteu(position);
       choosePoint=false;
-
     }
   }
 }
@@ -200,7 +201,7 @@ function chooseSpot() {
   choosePoint = true;
 }
 function sendPostBaggeteu(position){
-  var payload = {
+    var payload = {
       x: position.lat(),
       y: position.lng(),
       description: document.getElementById('description').value
@@ -214,7 +215,7 @@ function sendPostBaggeteu(position){
       body: data
     })
     .then(function(res){ return res.json(); })
-    .then(function(data){ fetchMarkers(); })
+    .then(function(data){  })
 }
 
 function sendPostParty(position){
