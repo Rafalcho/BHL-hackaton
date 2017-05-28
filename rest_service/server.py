@@ -58,9 +58,9 @@ class Patrols(Resource):
         return json.dumps(patrols), 200
 
     def post(self):
-        print (request.data)
+        print(request.data)
         data = json.loads(request.data.decode())
-        print (data)
+        print(data)
         entity = {'x': float(data['x']), 'y': float(data['y']),
                   'time': dt.datetime.now().timestamp(), 'description': data['description']}
         print(entity)
@@ -73,8 +73,67 @@ class Patrols(Resource):
         return to_response, 201
 
 
-api.add_resource(Patrols, '/patrols/')
+class Parties(Resource):
 
+    def get(self):
+        args = request.args
+        client_x = float(args['x'])
+        client_y = float(args['y'])
+        radius = float(args['rad'])
+
+        posts = mongo_client['parties']
+        parties = []
+
+        for post in posts.find():
+            if _points_to_distance(client_x, client_y, post['x'], post['y']) < radius:
+                parties.append({"name": post["name"],"x": post["x"], "y": post["y"],
+                                "description": post["description"], "people": post['people']})
+        logging.info("GET request on /parties/")
+        return json.dumps(parties), 200
+
+    def post(self):
+        print(request.data)
+        data = json.loads(request.data.decode())
+        entity = {'name': data['name'], 'x': float(data['x']), 'y': float(data['y']),
+                  'description': data['description'], 'people': []}
+        to_response = json.dumps(entity)
+        print(entity)
+        mongo_client['parties'].insert(entity)
+        mongo_client['parties'].save(entity)
+        logging.info("POST request on /parties/")
+        return to_response, 201
+
+
+class PartyPeople(Resource):
+    def post(self, name):
+        data = json.loads(request.data.decode())
+        name_ = data['name']
+        surname_ = data['surname']
+
+        mongo_client['parties'].update({'name': name}, {'$push': {'people': {'name': name_, 'surname': surname_}}})
+
+        logging.info("PUT request on /parties/name")
+        return 201
+
+
+class PartyPerson(Resource):
+    def delete(self, name, id_person):
+        posts = mongo_client['parties']
+
+        for i in posts.find({"name": name}):
+            i["people"] = list(filter(
+                lambda x: x['name'] + x['surname'] != i["people"][id_person]['name'] + i["people"][id_person][
+                    'surname'], i["people"]))
+            posts.save(i)
+
+        logging.info("PUT request on /parties/%s/people/%d" % (name, id_person))
+        return 204
+
+
+api.add_resource(Patrols, '/patrols/')
+api.add_resource(Parties, '/parties/')
+api.add_resource(PartyPeople, '/parties/<string:name>/people')
+api.add_resource(PartyPerson, '/parties/<string:name>/people/<int:id_person>')
 
 if __name__ == '__main__':
     Process(target=cleaner_patrol_worker, args=(SECONDS_THRESHOLD, PERIOD_TIME_SECONDS_CLEANING_PATROL)).start()

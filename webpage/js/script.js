@@ -114,8 +114,7 @@ function initMap() {
           }
         });
     };
-
-  // fetchAlerts();
+  fetchAlerts();
 
   let refresherAlers = setInterval(() => {
           if ((Date.now() - last_alert_time) > 180000) {
@@ -163,7 +162,7 @@ function initMap() {
     var myCity = new google.maps.Marker({
         position: myPosition,
         animation: google.maps.Animation.DROP,
-        icon: 'img/rsz_128135a8d0f0b984c0e1830d8c92ba2e6f6487.png',
+        icon: 'img/rafal.png',
         map: map,
         title: 'Hello World!'
       });
@@ -183,6 +182,7 @@ function initMap() {
     if(choosePoint){
       sendPostBaggeteu(position);
       choosePoint=false;
+
     }
   }
 }
@@ -214,7 +214,7 @@ function sendPostBaggeteu(position){
       body: data
     })
     .then(function(res){ return res.json(); })
-    .then(function(data){  })
+    .then(function(data){ fetchMarkers(); })
 }
 
 function sendPostParty(position){
@@ -274,7 +274,7 @@ const getParties = () => {
     let newMarker = new google.maps.Marker({
       position: {lat: marker.x, lng: marker.y},
       animation: google.maps.Animation.BOUNCE,
-      icon: 'https://cdn1.iconfinder.com/data/icons/party-3/500/Party_2-128.png',
+      icon: 'img/kufel.png',
       map: map,
       title: 'Hello World!'
     });
@@ -322,8 +322,8 @@ function joinParty(){
       body: data
     })
     .then(function(res){ return res.json(); })
-    .then(function(data){  })
-    getParties();
+    .then(function(data){ showParty(); })
+    // getParties();
 
 }
 
