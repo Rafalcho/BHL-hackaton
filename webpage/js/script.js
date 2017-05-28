@@ -13,7 +13,7 @@ function initMap() {
   });
 
   const fetchMarkers = () => {
-    let url = 'http://10.78.16.243:8080/patrols/?x='+myPosition.lat()+'&y='+myPosition.lng()+'&rad=100';
+    let url = 'https://10.78.25.34:8080/patrols/?x='+myPosition.lat()+'&y='+myPosition.lng()+'&rad=100';
     fetch(url).then(response => {
       if (response.ok) {
         return response.json();
@@ -163,7 +163,7 @@ function initMap() {
     var myCity = new google.maps.Marker({
         position: myPosition,
         animation: google.maps.Animation.DROP,
-        icon: '../img/rsz_128135a8d0f0b984c0e1830d8c92ba2e6f6487.png',
+        icon: 'img/rsz_128135a8d0f0b984c0e1830d8c92ba2e6f6487.png',
         map: map,
         title: 'Hello World!'
       });
@@ -208,7 +208,7 @@ function sendPostBaggeteu(position){
 
   var data = JSON.stringify( payload );
 
-  fetch("http://10.78.16.243:8080/patrols/",
+  fetch("https://10.78.25.34:8080/patrols/",
     {
       method: "POST",
       body: data
@@ -227,7 +227,7 @@ function sendPostParty(position){
 
   var data = JSON.stringify( payload );
 console.log(data);
-  fetch("http://10.78.16.243:8080/parties/",
+  fetch("https://10.78.25.34:8080/parties/",
     {
       method: "POST",
       body: data
@@ -258,7 +258,7 @@ function showParty(){
   getParties();
 }
 const getParties = () => {
-  let url = 'http://10.78.16.243:8080/parties/?x='+myPosition.lat()+'&y='+myPosition.lng()+'&rad=100';
+  let url = 'https://10.78.25.34:8080/parties/?x='+myPosition.lat()+'&y='+myPosition.lng()+'&rad=100';
   fetch(url).then(response => {
     if (response.ok) {
     return response.json();
@@ -316,7 +316,7 @@ function joinParty(){
 
   var data = JSON.stringify( payload );
   console.log(data);
-  fetch("http://10.78.16.243:8080/parties/"+name+"/people",
+  fetch("https://10.78.25.34:8080/parties/"+name+"/people",
     {
       method: "POST",
       body: data
@@ -326,3 +326,4 @@ function joinParty(){
     getParties();
 
 }
+
