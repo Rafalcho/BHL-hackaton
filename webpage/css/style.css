@@ -15,3 +15,11 @@ nav {
   top: 0;
   left: 0;
 }
+
+
+#alertPopup {
+  z-index: 2;
+  position: absolute;
+  top:80px;
+  left: 20px;
+}

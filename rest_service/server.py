@@ -52,7 +52,8 @@ class Patrols(Resource):
         for post in posts.find():
             if _points_to_distance(client_x, client_y, post['x'], post['y']) < radius:
                 patrols.append({"x": post["x"], "y": post["y"],
-                                "time": post["time"], "description": post["description"]})
+                                "time": post["time"], "description": post["description"],
+                                "id": str(post["_id"])})
         logging.info("GET request on /patrols/")
         return json.dumps(patrols), 200
 
@@ -62,10 +63,12 @@ class Patrols(Resource):
         print (data)
         entity = {'x': float(data['x']), 'y': float(data['y']),
                   'time': dt.datetime.now().timestamp(), 'description': data['description']}
-        to_response = json.dumps(entity)
         print(entity)
         mongo_client['patrols'].insert(entity)
         mongo_client['patrols'].save(entity)
+        to_response = json.dumps({"x": entity["x"], "y": entity["y"],
+                                  "time": entity["time"], "description": entity["description"],
+                                  "id": str(entity["_id"])})
         logging.info("POST request on /patrols/")
         return to_response, 201
 
