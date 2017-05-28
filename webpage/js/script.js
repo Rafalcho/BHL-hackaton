@@ -176,6 +176,7 @@ function addParty(){
   document.getElementById("partyForm").style.visibility="visible";
 }
 function showParty(){
+  parties=[];
   getParties();
 }
 const getParties = () => {
@@ -244,7 +245,7 @@ function joinParty(){
     })
     .then(function(res){ return res.json(); })
     .then(function(data){  })
-
+    getParties();
 
 }
 
