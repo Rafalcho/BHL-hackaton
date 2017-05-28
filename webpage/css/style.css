@@ -25,8 +25,9 @@ nav {
   top:100px;
   left: 0!important;
  margin: 0 auto;
+ width: 95vw;
 }
 
 .pop {
-  width: 98vw;
+  width: 95vw;
 }
